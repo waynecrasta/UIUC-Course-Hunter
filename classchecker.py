@@ -3,17 +3,18 @@ import requests
 from sendemail import sendEmail
 from time import sleep
 import datetime
+import os
 
 
 def check_open():
-    # course = {'department': 'ECE', 'number': 408, 'crn': 58790}
-    # url = 'http://courses.illinois.edu/cisapp/explorer/schedule/2016/fall/{}/{}/{}.xml'.format(course['department'], course['number'], course['crn'])
-    # r = requests.get(url)
-    # xml = r.text
+    course = {'department': 'ECE', 'number': 408, 'crn': 58790}
+    url = 'http://courses.illinois.edu/cisapp/explorer/schedule/2016/fall/{}/{}/{}.xml'.format(course['department'], course['number'], course['crn'])
+    r = requests.get(url)
+    xml = r.text
 
     # For testing with localXML #
-    with open('test.xml', 'r') as xml:
-        xml = xml.read()
+    # with open('test.xml', 'r') as xml:
+    #     xml = xml.read()
 
     try:
         root = ET.fromstring(xml)
@@ -31,14 +32,20 @@ def check_open():
 if __name__ == '__main__':
     print "\n-- FALL 2016 Course Checker by Wayne --\n"
     course_open = 0
+    f = open('log.txt', 'r+')
     while(1):
         prelog = datetime.datetime.now().strftime("%m/%d %I:%M:%S %p: ")
         if check_open():
             if(course_open != 1):
                 sendEmail()
-                print "\n{}EMAIL SENT\n".format(prelog)
+                f.write("\n{}EMAIL SENT\n".format(prelog))
                 course_open = 1
         else:
-            print "\n{}closed".format(prelog)
+            logtext = "\n{}closed".format(prelog)
+            f.write(logtext)
+            f.flush()
+            os.fsync(f.fileno())
+            print "written"
             course_open = 0
         sleep(1260)
+    f.close()
