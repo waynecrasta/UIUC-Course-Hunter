@@ -48,5 +48,5 @@ if __name__ == '__main__':
             if(course_open == 1):
                 sendEmail("Your class has closed")
             course_open = 0
-        sleep(5)
+        sleep(1260)
     f.close()
