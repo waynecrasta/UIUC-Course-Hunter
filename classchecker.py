@@ -13,9 +13,9 @@ def check_open():
     r = requests.get(url)
     xml = r.text
 
-#    For testing with localXML #
-#    with open('test.xml', 'r') as xml:
-#        xml = xml.read()
+    # For testing with localXML #
+    # with open('test.xml', 'r') as xml:
+    #     xml = xml.read()
 
     try:
         root = ET.fromstring(xml)
@@ -29,7 +29,7 @@ def check_open():
         return 1
 
 if __name__ == '__main__':
-    print "\n-- FALL 2016 Course Checker by Wayne --\n"
+    open('log.txt', 'w').close()
     course_open = 0
     f = open('log.txt', 'r+')
     while(1):
@@ -47,4 +47,3 @@ if __name__ == '__main__':
             course_open = 0
         sleep(1260)
     f.close()
-
