@@ -4,6 +4,7 @@ from sendemail import sendEmail
 from time import sleep
 import datetime
 import os
+from pytz import timezone
 
 
 def check_open():
@@ -12,9 +13,9 @@ def check_open():
     r = requests.get(url)
     xml = r.text
 
-    # For testing with localXML #
-    # with open('test.xml', 'r') as xml:
-    #     xml = xml.read()
+#    For testing with localXML #
+#    with open('test.xml', 'r') as xml:
+#        xml = xml.read()
 
     try:
         root = ET.fromstring(xml)
@@ -34,18 +35,18 @@ if __name__ == '__main__':
     course_open = 0
     f = open('log.txt', 'r+')
     while(1):
-        prelog = datetime.datetime.now().strftime("%m/%d %I:%M:%S %p: ")
+        prelog = datetime.datetime.now(timezone('US/Central')).strftime("%m/%d %I:%M:%S %p: ")
         if check_open():
             if(course_open != 1):
                 sendEmail()
                 f.write("\n{}EMAIL SENT\n".format(prelog))
                 course_open = 1
         else:
-            logtext = "\n{}closed".format(prelog)
+            logtext = "{}closed\n".format(prelog)
             f.write(logtext)
             f.flush()
             os.fsync(f.fileno())
-            print "written"
             course_open = 0
         sleep(1260)
     f.close()
+
