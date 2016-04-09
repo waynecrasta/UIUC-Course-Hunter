@@ -35,15 +35,18 @@ if __name__ == '__main__':
     while(1):
         prelog = datetime.datetime.now(timezone('US/Central')).strftime("%m/%d %I:%M:%S %p: ")
         if check_open():
-            if(course_open != 1):
-                sendEmail()
-                f.write("\n{}EMAIL SENT\n".format(prelog))
+            if(course_open == 0):
+                logtext = "{}Opened\n".format(prelog)
+                sendEmail("Your class has opened")
+                f.write(logtext)
                 course_open = 1
         else:
-            logtext = "{}closed\n".format(prelog)
+            logtext = "{}Closed\n".format(prelog)
             f.write(logtext)
             f.flush()
             os.fsync(f.fileno())
+            if(course_open == 1):
+                sendEmail("Your class has closed")
             course_open = 0
-        sleep(1260)
+        sleep(5)
     f.close()
