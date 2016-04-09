@@ -8,7 +8,7 @@ from pytz import timezone
 
 
 def check_open():
-    course = {'department': 'ECE', 'number': 408, 'crn': 58790}
+    course = {'department': 'ECE', 'number': 448, 'crn': 36055}
     url = 'http://courses.illinois.edu/cisapp/explorer/schedule/2016/fall/{}/{}/{}.xml'.format(course['department'], course['number'], course['crn'])
     r = requests.get(url)
     xml = r.text
@@ -23,12 +23,10 @@ def check_open():
         print "Class doesn't exist :("
         return
     avail = root.find('enrollmentStatus').text
-    if avail == "CrossListOpen" or avail == "Open":
-        return 1
-    elif avail == "CrossListOpen (Restricted)":
-        return 1
-    else:
+    if avail == "Closed":
         return 0
+    else:
+        return 1
 
 if __name__ == '__main__':
     print "\n-- FALL 2016 Course Checker by Wayne --\n"
