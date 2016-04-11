@@ -6,9 +6,10 @@ import datetime
 import os
 from pytz import timezone
 
+course = {'department': 'ECE', 'number': 448, 'crn': 36055}
+
 
 def check_open():
-    course = {'department': 'ECE', 'number': 448, 'crn': 36055}
     url = 'http://courses.illinois.edu/cisapp/explorer/schedule/2016/fall/{}/{}/{}.xml'.format(course['department'], course['number'], course['crn'])
     r = requests.get(url)
     xml = r.text
@@ -37,16 +38,17 @@ if __name__ == '__main__':
         if check_open():
             if(course_open == 0):
                 logtext = "{}Opened\n".format(prelog)
-                sendEmail("Your class has opened")
-                f.write(logtext)
+                sendEmail("Your class has opened.")
+                sleep(5)
+                sendEmail(str(course['crn']))
                 course_open = 1
         else:
             logtext = "{}Closed\n".format(prelog)
-            f.write(logtext)
-            f.flush()
-            os.fsync(f.fileno())
             if(course_open == 1):
                 sendEmail("Your class has closed")
             course_open = 0
+        f.write(logtext)
+        f.flush()
+        os.fsync(f.fileno())
         sleep(1260)
     f.close()
