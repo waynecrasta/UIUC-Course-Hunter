@@ -24,7 +24,7 @@ def check_open():
         print "Class doesn't exist :("
         return
     avail = root.find('enrollmentStatus').text
-    if avail == "Closed":
+    if avail == "Closed" or avail == "UNKNOWN":
         return 0
     else:
         return 1
