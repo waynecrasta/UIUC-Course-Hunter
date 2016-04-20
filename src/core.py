@@ -34,6 +34,7 @@ if __name__ == '__main__':
     course_open = 0
     f = open('log.txt', 'r+')
     while(1):
+        print 'RUNNNING'
         prelog = datetime.datetime.now(timezone('US/Central')).strftime("%m/%d %I:%M:%S %p: ")
         if check_open():
             if(course_open == 0):

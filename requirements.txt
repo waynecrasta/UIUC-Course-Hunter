@@ -1,2 +1,2 @@
-requests==2.7.0
-pytz==2016.3
+requests
+pytz
