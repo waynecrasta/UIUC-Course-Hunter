@@ -20,7 +20,7 @@ def check_open():
 
     try:
         root = ET.fromstring(xml)
-    except:
+    except ET.ParseError:
         print "Class doesn't exist :("
         return
     avail = root.find('enrollmentStatus').text
@@ -33,11 +33,12 @@ if __name__ == '__main__':
     open('log.txt', 'w').close()
     course_open = 0
     f = open('log.txt', 'r+')
-    while(1):
+    logtext = ''
+    while 1:
         print 'RUNNNING'
         prelog = datetime.datetime.now(timezone('US/Central')).strftime("%m/%d %I:%M:%S %p: ")
         if check_open():
-            if(course_open == 0):
+            if course_open == 0:
                 logtext = "{}Opened\n".format(prelog)
                 sendEmail("Your class has opened.")
                 sleep(5)
@@ -45,7 +46,7 @@ if __name__ == '__main__':
                 course_open = 1
         else:
             logtext = "{}Closed\n".format(prelog)
-            if(course_open == 1):
+            if course_open == 1:
                 sendEmail("Your class has closed")
             course_open = 0
         f.write(logtext)
